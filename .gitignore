@@ -1,0 +1,34 @@
+# Build artifacts
+bootstrap
+*.exe
+main
+
+# Dependencies
+/node_modules
+vendor/
+
+# LocalStack
+.localstack
+volume/
+localstack_endpoints.json
+
+# Environment
+.env
+.env.local
+
+# IDE
+.idea/
+.vscode/
+
+# Test artifacts
+test.json
+test.txt
+*.log
+
+# Serverless
+.serverless/
+serverless.js
+
+# Go
+*.test
+*.out

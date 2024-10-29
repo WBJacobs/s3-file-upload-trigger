@@ -1,0 +1,61 @@
+service: s3-to-rabbitmq-processor
+
+frameworkVersion: '4'
+
+provider:
+  name: aws
+  runtime: provided.al2
+  region: eu-west-1
+  environment:
+    RABBITMQ_HOST: rabbitmq
+    RABBITMQ_PORT: "5672"
+    RABBITMQ_USERNAME: guest
+    RABBITMQ_PASSWORD: guest
+
+custom:
+  localstack:
+    stages:
+      - local
+    host: http://localhost
+    edgePort: 4566
+    lambda:
+      mountCode: true
+    docker:
+      lambda:
+        runtimeExecutable: /var/runtime/bootstrap
+    # Add these settings for better region handling
+    s3:
+      # This ensures S3 uses the correct endpoint
+      host: localhost
+    endpointFile: localstack_endpoints.json  # This will be auto-generated
+
+package:
+  individually: true
+  patterns:
+    - '!./**'
+    - '!./**/*'
+    - '!package.json'
+    - '!package-lock.json'
+    - '!node_modules/**'
+    - '!*.test.js'
+    - '!.idea/**'
+    - '!.vscode/**'
+    - '!.git/**'
+    - '!*.md'
+
+functions:
+  processUpload:
+    handler: main
+    package:
+      patterns:
+        - './bootstrap'
+    architecture: x86_64
+    events:
+      - s3:
+          bucket: test-bucket
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: uploads/
+
+plugins:
+  - serverless-localstack
