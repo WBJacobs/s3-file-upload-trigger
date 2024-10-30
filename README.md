@@ -1,4 +1,4 @@
-# S3 to RabbitMQ Lambda
+# S3 to RabbitMQ Lambda (test)
 
 This project demonstrates a serverless application that processes S3 file uploads and sends notifications to RabbitMQ, running locally using LocalStack. Built for testing AWS Lambda functions that integrate with RabbitMQ in the eu-west-1 region.
 
